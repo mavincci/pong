@@ -10,13 +10,14 @@
 namespace mickey{
 	
 	class game{
-		constexpr static int WIN_WIDTH	= 700;
+		constexpr static int WIN_WIDTH	= 400;
 		constexpr static int WIN_HEIGHT	= WIN_WIDTH / 1.618;
 
 		constexpr static int PONG_WIN_WIDTH		= WIN_WIDTH - 50;
 		constexpr static int PONG_WIN_HEIGHT	= WIN_HEIGHT - 50;
 
-		
+		size_t l_score{0}, r_score{0};
+	
 
 	public:
 		game(){
@@ -30,33 +31,30 @@ namespace mickey{
 		}
 
 		void main_loop(){
-			while(true){
+			while(!pong->stop_play){
 				if(GetAsyncKeyState(VK_UP)){
 					pong->move(pong::wc_pad::right, pong::mv_dir::up);
-					std::cout << "UP for right\n";
 				}else if(GetAsyncKeyState(VK_DOWN)){
 					pong->move(pong::wc_pad::right, pong::mv_dir::down);
-					std::cout << "DOWN for right\n";
 				}
 				
 				if(GetAsyncKeyState(VK_SHIFT)){
 					pong->move(pong::wc_pad::left, pong::mv_dir::up);
-					std::cout << "UP for left\n";
 				}else if(GetAsyncKeyState(VK_CONTROL)){
 					pong->move(pong::wc_pad::left, pong::mv_dir::down);
-					std::cout << "DOWN for left\n";
 				}
 
 				if(GetAsyncKeyState(VK_ESCAPE)){
-					std::cout << "exit\n";
 					break;
 				}
+				pong->move_ball();
 				Sleep(30);
 			}
 		}
 
 		~game(){
 			if(grp)	delete grp;
+			if(pong)	delete pong;
 		}
 
 	private:
