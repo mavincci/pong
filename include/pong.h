@@ -5,10 +5,16 @@
 
 namespace mickey{
     namespace pong{
+        struct bound{
+            int l, t, r, b;
+        };
+
         struct thing{
             int x, y;
+            bound rect{0 ,0, 0, 0}; 
 
             virtual void draw()=0;
+            virtual void norm_loc()=0;
 
             void erase(){
                 setfillstyle(SOLID_FILL, BLACK);
@@ -26,6 +32,14 @@ namespace mickey{
                 x = _x;
                 y = _y;
             }
+            
+            bool operator==(thing* tng){
+                // check if upper right with the other
+                // check if upper left with the other
+                // check if lower right with the other
+                // check if lower left with the other
+                return false;
+            }
         };
 
         struct ball: thing{
@@ -38,6 +52,13 @@ namespace mickey{
 
             void draw() override{
                 fillellipse(x, y, r, r);
+            }
+
+            void norm_loc() override{
+                rect.l = x-r;
+                rect.t = y-r;
+                rect.r = x+r;
+                rect.b = y+r;
             }
         };
 
@@ -59,6 +80,13 @@ namespace mickey{
 
             void draw() override{
                 bar(x, y, w+x, h+y);
+            }
+
+            void norm_loc() override{
+                rect.l = x;
+                rect.t = y;
+                rect.r = x+w;
+                rect.b = y+h;
             }
         };
 
