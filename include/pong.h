@@ -35,20 +35,17 @@ namespace mickey{
                 norm_loc();
             }
 
-            inline bool check_coll(thing* tng){
-                // check if left with the other
-                if(this->rect.r >= tng->rect.l && this->rect.r <= tng->rect.r){
-                    if(this->rect.t >= tng->rect.t && this->rect.t <= tng->rect.b)
+            inline bool check_coll_x(thing* tng){
+                if( (this->rect.r >= tng->rect.l && this->rect.r <= tng->rect.r)||
+                    (this->rect.l <= tng->rect.r && this->rect.l >= tng->rect.l))
+                    return true;
+                return false;
+            }
+
+            inline bool check_coll_y(thing* tng){
+                if( (this->rect.t >= tng->rect.t && this->rect.t <= tng->rect.b)||
+                    (this->rect.t >= tng->rect.t && this->rect.t <= tng->rect.b))
                         return true;
-                    return false;
-                }
-                if(this->rect.l <= tng->rect.r && this->rect.l >= tng->rect.l){
-                    if(this->rect.t >= tng->rect.t && this->rect.t <= tng->rect.b)
-                        return true;
-                    return false;
-                }
-                // printf("Right pad{%d %d %d %d}\t", this->rect.l, this->rect.t, this->rect.r, this->rect.b);
-                // printf("Right tng{%d %d %d %d}\n", tng->rect.l, tng->rect.t, tng->rect.r, tng->rect.b);
                 return false;
             }
             ~thing(){};
@@ -144,8 +141,8 @@ namespace mickey{
                     temp->rect.l >= x+w-15)
                     stop_play = true;
 
-                if( bal->check_coll(l_pad) ||
-                    bal->check_coll(r_pad))
+                if( (bal->check_coll_y(l_pad) && bal->check_coll_x(l_pad)) ||
+                    (bal->check_coll_y(r_pad) && bal->check_coll_x(r_pad)))
                     temp->set_speed(-bal->sx, bal->sy);
                 bal->advance();
             }
