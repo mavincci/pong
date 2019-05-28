@@ -64,9 +64,7 @@ namespace mickey{
                 sy = _y;
             }
 
-            void advance(){
-                move(sx, sy);
-            }
+            void advance(){ move(sx, sy);   }
 
             void draw() override{
                 fillellipse(x, y, r, r);
@@ -135,15 +133,17 @@ namespace mickey{
             }
             void move_ball(){
                 ball* temp = bal;
-                if(temp->rect.t <= y+5 || temp->rect.b >= y+h-5)
-                    temp->set_speed(bal->sx, -bal->sy);
-                if( temp->rect.r <= x+15 ||
-                    temp->rect.l >= x+w-15)
+                // if( temp->rect.r <= x+15 || temp->rect.l >= x+w-15)
+                if( temp->rect.r >= r_pad->rect.l+5 || temp->rect.l <= l_pad->rect.r-5)
                     stop_play = true;
 
                 if( (bal->check_coll_y(l_pad) && bal->check_coll_x(l_pad)) ||
                     (bal->check_coll_y(r_pad) && bal->check_coll_x(r_pad)))
                     temp->set_speed(-bal->sx, bal->sy);
+                    
+                if(temp->rect.t <= y+5 || temp->rect.b >= y+h-5)
+                    temp->set_speed(bal->sx, -bal->sy);
+
                 bal->advance();
             }
             // ~pong(){
